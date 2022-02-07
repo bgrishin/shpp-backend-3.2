@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ Панель</title>
+    <link rel="stylesheet" href="http://localhost:3000/style/admin_page.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="logo outside"><a class="navbar-brand"><span class="sh">Ш</span><span class="plus">++</span> Библиотека</a></div>
+    <div class="wrapper">
+        <div class="table_part">
+            <div class="table">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Pages</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Clicks</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td><a href="https://youtube.com">Kill</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td colspan="2">Larry the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <ul> <!-- пагинация прогрузиться в скрипте --> </ul>
+            </div>
+        </div>
+        <div class="form_part">
+            <!-- цитата - copy-paste кусков фронта из инета без думанья -->
+            <form action="http://localhost:3000/admin/save" method="post">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Имя</label>
+                    <input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Имя" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Автор</label>
+                    <input class="form-control" id="exampleInputPassword1" placeholder="Автор" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputYear">Автор</label>
+                    <input class="form-control" id="exampleInputYear" placeholder="Год" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Страницы</label>
+                    <input class="form-control" id="exampleInputPages" placeholder="Кол-во страниц" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlFile1">Фото книги (формат 465x660)</label>
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <button class="exit btn btn-primary outside"><a href="http://localhost:3000">Выход</a></button>
+    <script>
+        const element = document.querySelector(".pagination ul");
+        let active;
+        let totalPages = 10;
+        let GlobalPage = 1;
+        let page = 4
+
+        element.innerHTML = createPagination(totalPages, page);
+        function createPagination(totalPages, page){
+            GlobalPage = page
+            let liTag = '';
+            let beforePage = page - 1;
+            let afterPage = page + 1;
+            if(page > 1){
+                liTag += `<li class="btn prev" onclick="createPagination(totalPages, ${page - 1})"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
+            }
+
+            if(page > 2){
+                liTag += `<li class="first numb" onclick="createPagination(totalPages, 1)"><span>1</span></li>`;
+                if(page > 3){
+                    liTag += `<li class="dots"><span>...</span></li>`;
+                }
+            }
+
+            if (page === totalPages) {
+                beforePage = beforePage - 2;
+            } else if (page === totalPages - 1) {
+                beforePage = beforePage - 1;
+            }
+
+            if (page === 1) {
+                afterPage = afterPage + 2;
+            } else if (page === 2) {
+                afterPage  = afterPage + 1;
+            }
+
+            for (var plength = beforePage; plength <= afterPage; plength++) {
+                if (plength > totalPages) {
+                    continue;
+                }
+                if (plength === 0) {
+                    plength = plength + 1;
+                }
+                if(page === plength){
+                    active = "active";
+                }else{
+                    active = "";
+                }
+                liTag += `<li class="numb ${active}" onclick="createPagination(totalPages, ${plength})"><span>${plength}</span></li>`;
+            }
+
+            if(page < totalPages - 1){
+                if(page < totalPages - 2){
+                    liTag += `<li class="dots"><span>...</span></li>`;
+                }
+                liTag += `<li class="last numb" onclick="createPagination(totalPages, ${totalPages})"><span>${totalPages}</span></li>`;
+            }
+
+            if (page < totalPages) {
+                liTag += `<li class="btn next" onclick="createPagination(totalPages, ${page + 1})"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
+            }
+            element.innerHTML = liTag;
+            return liTag;
+        }
+    </script>
+</body>
+</html>

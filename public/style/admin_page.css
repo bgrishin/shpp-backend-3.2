@@ -1,0 +1,111 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrapper {
+    margin: 30px; !important;
+}
+.table {
+    width: 30vh; !important;
+}
+
+.form_part {
+    margin-top: 30px;
+    width: 60vh;
+}
+.outside {
+    margin: 30px;
+}
+
+.separator {
+    height: 2px;
+    width: 100%;
+    background-color: #bebebe;
+}
+
+.exit a {
+    text-decoration: none; !important;
+    color: white; !important;
+}
+
+.pagination {
+    max-width: 48vh;
+}
+
+.pagination ul{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    padding: 8px;
+    border-radius: 50px;
+    box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+.pagination ul li{
+    color: #000000;
+    list-style: none;
+    line-height: 45px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+.pagination ul li.numb{
+    list-style: none;
+    height: 45px;
+    width: 45px;
+    margin: 0 3px;
+    line-height: 45px;
+    border-radius: 50%;
+}
+.pagination ul li.numb.first{
+    margin: 0px 3px 0 -5px;
+}
+.pagination ul li.numb.last{
+    margin: 0px -5px 0 3px;
+}
+.pagination ul li.dots{
+    font-size: 22px;
+    cursor: default;
+}
+.pagination ul li.btn{
+    padding: 0 20px;
+    border-radius: 50px;
+}
+.pagination li.active,
+.pagination ul li.numb:hover,
+.pagination ul li:first-child:hover,
+.pagination ul li:last-child:hover{
+    color: #fff;
+    background: #000000;
+}
+
+.delete {
+    padding: 5px;
+    background: #ff3838;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.3s;
+    border: 2px solid #ff3838;
+}
+
+.delete:hover {
+    background: white;
+    color: #ff3838;
+}
+
+.author_form {
+    margin-top: 30px;
+}
+
+.author_submit {
+    margin-top: 10px;
+}

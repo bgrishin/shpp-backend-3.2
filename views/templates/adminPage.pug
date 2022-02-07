@@ -1,0 +1,155 @@
+doctype html
+head
+    meta(charset='UTF-8')
+    title &Acy;&dcy;&mcy;&icy;&ncy; &Pcy;&acy;&ncy;&iecy;&lcy;&softcy;
+    link(rel='stylesheet' href='http://localhost:3000/style/admin_page.css')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous')
+.logo.outside
+    a.navbar-brand
+        span.sh &SHcy;
+        span.plus ++
+        |  &Bcy;&icy;&bcy;&lcy;&icy;&ocy;&tcy;&iecy;&kcy;&acy;
+.wrapper
+    .table_part
+        .table
+            table.table.table-hover
+                thead
+                    tr
+                        th(scope='col') ID
+                        th(scope='col') Name
+                        th(scope='col') Author
+                        th(scope='col') Pages
+                        th(scope='col') Year
+                        th(scope='col') Clicks
+                        th(scope='col') Actions
+                tbody
+                    each book in books
+                        tr
+                            th(scope='row')= `${book.id}`
+                            td= `${book.name}`
+                            td= `${book.author}`
+                            td= `${book.pages}`
+                            td= `${book.year}`
+                            td= `${book.clicks}`
+                            td
+                                a.delete(onclick=`deleteRequest(${book.id})`) Delete
+        .pagination
+            ul
+                // пагинация прогрузиться в скрипте
+    .form_part
+        // цитата - copy-paste кусков фронта из инета без думанья
+        form(action='/admin/save' method='post' enctype="multipart/form-data")
+            .form-group
+                label(for='exampleInputEmail1') &Icy;&mcy;&yacy;
+                input#exampleInputEmail1.form-control(aria-describedby='emailHelp' placeholder='Имя' name='name' required='')
+            .form-group
+                label(for='author-select') &Acy;&vcy;&tcy;&ocy;&rcy;
+                select#author-select.form-select(aria-label='Default select example' name='author')
+                    option(value='' selected='') Выберите автора
+                    each author in authors
+                        option(value=`${author.id}`)= `${author.name}`
+            .form-group
+                label(for='exampleInputYear') Год
+                input#exampleInputYear.form-control(placeholder='Год' name='year' required='')
+            .form-group
+                label(for='exampleInputPages') &Scy;&tcy;&rcy;&acy;&ncy;&icy;&tscy;&ycy;
+                input#exampleInputPages.form-control(placeholder='Кол-во страниц' name='pages' required='')
+            .form-group
+                label(for='exampleFormControlFile1') &Fcy;&ocy;&tcy;&ocy; &kcy;&ncy;&icy;&gcy;&icy; (&fcy;&ocy;&rcy;&mcy;&acy;&tcy; 465x660)
+                input#exampleFormControlFile1.form-control-file(type='file' accept="image/*,image/jpeg" name='image' required='')
+            input.btn.btn-primary(type='submit')
+        form.author_form(action='/admin/saveauthor' method='post')
+            .form-group
+                label(for='author_name') Добавить автора
+                input#author_name.form-control(aria-describedby='emailHelp' placeholder='Имя автора' name='author_name' required='')
+            input.author_submit.btn.btn-primary(type='submit')
+.separator
+button(onclick='makeLogout()').exit.btn.btn-primary.outside
+    a &Vcy;&ycy;&khcy;&ocy;&dcy;
+script.
+    const element = document.querySelector(".pagination ul");
+    let active;
+    let totalPages = #{allPages};
+    let GlobalPage = 1;
+    let page = #{currentPage}
+    element.innerHTML = createPagination(totalPages, page);
+    function createPagination(totalPages, page){
+        GlobalPage = page
+        let liTag = '';
+        let beforePage = page - 1;
+        let afterPage = page + 1;
+        if(page > 1){
+            liTag += `<li class="btn prev" onclick="selectPagination(${page - 1})"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
+        }
+        if(page > 2){
+            liTag += `<li class="first numb" onclick="selectPagination(1)"><span>1</span></li>`;
+            if(page > 3){
+                liTag += `<li class="dots"><span>...</span></li>`;
+            }
+        }
+        if (page === totalPages) {
+            beforePage = beforePage - 2;
+        } else if (page === totalPages - 1) {
+            beforePage = beforePage - 1;
+        }
+        if (page === 1) {
+            afterPage = afterPage + 2;
+        } else if (page === 2) {
+            afterPage  = afterPage + 1;
+        }
+        for (let plength = beforePage; plength <= afterPage; plength++) {
+            if (plength > totalPages) {
+                continue;
+            }
+            if (plength === 0) {
+                plength = plength + 1;
+            }
+            if(page === plength){
+                active = "active";
+            }else{
+                active = "";
+            }
+            liTag += `<li class="numb ${active}" onclick="selectPagination(${plength})"><span>${plength}</span></li>`;
+        }
+        if(page < totalPages - 1){
+            if(page < totalPages - 2){
+                liTag += `<li class="dots"><span>...</span></li>`;
+            }
+            liTag += `<li class="last numb" onclick="selectPagination(${totalPages})"><span>${totalPages}</span></li>`;
+        }
+        if (page < totalPages) {
+            liTag += `<li class="btn next" onclick="selectPagination(${page + 1})"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
+        }
+        element.innerHTML = liTag;
+        return liTag;
+    }
+    function selectPagination(page) {
+        const offset = page * 5 - 5
+        window.location.href = 'http://localhost:3000/admin/?offset=' + offset
+    }
+
+    function makeLogout() {
+        fetch('http://localhost:3000/admin', {
+            headers: {
+                'Authorization': 'Basic LOGOUT'
+            }
+        })
+        window.location.href = 'http://localhost:3000'
+    }
+
+    function createBook() {
+
+    }
+
+    function deleteRequest(id) {
+        let confirmation = confirm('Вы уверены что хотите удалить книгу с ID ' + id + '?')
+        if(confirmation) {
+            fetch('http://localhost:3000/admin/' + id, {
+                method: 'DELETE'
+            }).then((res) => {
+                if (res.ok) {
+                    window.location.href = 'http://localhost:3000/admin/?offset=0'
+                }
+            })
+        }
+    }
