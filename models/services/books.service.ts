@@ -2,7 +2,7 @@ import {db} from "../config/db.connection";
 require('mysql2/promise')
 
 import {RowDataPacket} from "mysql2";
-import {authors, Books_Authors, Idatapack, Iresult} from "../../interfaces/books.interface";
+import {Iresult} from "../../interfaces/books.interface";
 
 export let allBooksLength: number
 
@@ -11,16 +11,14 @@ export let allBooksLength: number
 })()
 
 export async function getAll(offset: number) {
-    const books = await db.promise().query('SELECT * FROM Books WHERE NOT deleted=TRUE ORDER BY id LIMIT ?, 20', offset)
+    const books = await db.promise().query('SELECT * FROM Books JOIN Books_Authors ON Books_Authors.book_id = Books.id JOIN Authors ON Books_Authors.author_id = Authors.id WHERE NOT books.deleted=TRUE ORDER BY books.id LIMIT ?, 20', offset)
     if((books as RowDataPacket)[0].length === 0) {
         return {
             error: '404'
         }
     }
-    const books_authors = await db.promise().query('SELECT * FROM Books_Authors')
-    const authors = await db.promise().query('SELECT * FROM Authors')
     let result: Iresult = {
-        books: [],
+        books: (books as RowDataPacket)[0],
         page: 1,
         last: false,
         currentOffset: offset,
@@ -29,7 +27,6 @@ export async function getAll(offset: number) {
     if(result.page) {
         result.page = offset / 20 + 1
     }
-
     if(!(result.page - 1)) {
         result.last = 'prev'
     }
@@ -39,37 +36,18 @@ export async function getAll(offset: number) {
     if(result.page === allBooksLength && !(result.page - 1)) {
         result.last = 'all'
     }
-    for(let i = 0; i < (books as RowDataPacket)[0].length; i++) {
-        const author_id = (books_authors as RowDataPacket)[0].find((data: Books_Authors) => data.book_id === (books as RowDataPacket)[0][i].id)?.author_id
-        const author = (authors as RowDataPacket)[0].find((data: authors) => data.id === author_id)?.name
-        result.books[i] = {
-            id: (books as RowDataPacket)[0][i].id,
-            name: (books as RowDataPacket)[0][i].name,
-            author: author,
-            imgUrl: (books as RowDataPacket)[0][i].imgUrl
-        }
-    }
     return (result as Iresult)
 }
 
 export async function getOneBook(id: number) {
-    const book = await db.promise().query<RowDataPacket[]>('SELECT * FROM Books WHERE id = ?', id)
+    const book = await db.promise().query<RowDataPacket[]>('SELECT * FROM Books JOIN Books_Authors ON Books_Authors.book_id = Books.id JOIN Authors ON Books_Authors.author_id = Authors.id WHERE books.id = ?', id)
     if(book[0].length === 0) {
         return {
             error: '404'
         }
     }
-    const author_id = await db.promise().query<RowDataPacket[]>('SELECT * FROM Books_Authors WHERE book_id = ?', book[0][0].id)
-    const author = await db.promise().query<RowDataPacket[]>('SELECT * FROM Authors WHERE id = ?', author_id[0][0].author_id)
-    const imgUrlForOne = book[0][0].imgUrl.slice(1) // because i need /images/20.jpg but i have ./images/20.jpg
-    return {
-        id: book[0][0].id,
-        imgUrl: imgUrlForOne,
-        name: book[0][0].name,
-        author: author[0][0].name,
-        pages: book[0][0].pages,
-        year: book[0][0].year
-    }
+    book[0][0].imgUrl = book[0][0].imgUrl.slice(1) // because i need /images/20.jpg but i have ./images/20.jpg
+    return (book[0][0] as RowDataPacket)
 }
 
 export async function registerClick(id: number) {
@@ -79,26 +57,13 @@ export async function registerClick(id: number) {
 }
 
 export async function findBooks(query: string) {
-    query = query.trim()
-    query = '%' + query + '%'
-    const books = await db.promise().query("SELECT * FROM Books WHERE name LIKE ?", query)
-    const books_authors = await db.promise().query('SELECT * FROM Books_Authors')
-    const authors = await db.promise().query('SELECT * FROM Authors')
-    let result: Idatapack[] = []
-    for(let i = 0; i < (books as RowDataPacket)[0].length; i++) {
-        const author_id = (books_authors as RowDataPacket)[0].find((data: Books_Authors) => data.book_id === (books as RowDataPacket)[0][i].id)?.author_id
-        const author = (authors as RowDataPacket)[0].find((data: authors) => data.id === author_id)?.name
-        result[i] = {
-            id: (books as RowDataPacket)[0][i].id,
-            name: (books as RowDataPacket)[0][i].name,
-            author: author,
-            imgUrl: (books as RowDataPacket)[0][i].imgUrl
-        }
-    }
+    query = '%' + query.trim() + '%'
+    const books = await db.promise().query<RowDataPacket[]>("SELECT * FROM Books JOIN Books_Authors ON Books_Authors.book_id = Books.id JOIN Authors ON Books_Authors.author_id = Authors.id WHERE NOT books.deleted=TRUE AND books.book_name LIKE ?", query)
+    let result: RowDataPacket[] = books[0]
     if(!(books as RowDataPacket)[0].length) {
         return false
     }
-    return (result as Idatapack[])
+    return (result as RowDataPacket)
 }
 
 async function getAllBooksLength() {
