@@ -25,14 +25,14 @@ head
                 tbody
                     each book in books
                         tr
-                            th(scope='row')= `${book.id}`
+                            th(scope='row')= `${book.book_id}`
+                            td= `${book.book_name}`
                             td= `${book.name}`
-                            td= `${book.author}`
                             td= `${book.pages}`
                             td= `${book.year}`
                             td= `${book.clicks}`
                             td
-                                a.delete(onclick=`deleteRequest(${book.id})`) Delete
+                                a.delete(onclick=`deleteRequest(${book.book_id})`) Delete
         .pagination
             ul
                 // пагинация прогрузиться в скрипте
@@ -46,8 +46,8 @@ head
                 label(for='author-select') &Acy;&vcy;&tcy;&ocy;&rcy;
                 select#author-select.form-select(aria-label='Default select example' name='author')
                     option(value='' selected='') Выберите автора
-                    each author in authors
-                        option(value=`${author.id}`)= `${author.name}`
+                    each book in books
+                        option(value=`${book.author_id}`)= `${book.name}`
             .form-group
                 label(for='exampleInputYear') Год
                 input#exampleInputYear.form-control(placeholder='Год' name='year' required='')
