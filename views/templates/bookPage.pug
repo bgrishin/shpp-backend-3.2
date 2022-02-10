@@ -1,6 +1,6 @@
 head
     meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
-    title #{name}
+    title #{book_name}
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
     meta(name='viewport' content='width=device-width, initial-scale=1')
     meta(name='description' content='library Sh++')
@@ -38,17 +38,17 @@ section#header.header-wrapper
 section#main.main-wrapper
     .container
         #content.book_block.col-xs-12.col-sm-12.col-md-12.col-lg-12
-            #id(book-id=`${name}`)
+            #id
                 #bookImg(class="col-xs-12 col-sm-3 col-md-3 item")
-                    img.img-responsive(src=`${imgUrl}` alt=`${name}`)
+                    img.img-responsive(src=`${imgUrl}` alt=`${book_name}`)
                 .col-xs-12.col-sm-9.col-md-9.col-lg-9.info
                     .bookInfo.col-md-12
-                        #tittle.titleBook= `${name}`
+                        #tittle.titleBook= `${book_name}`
                     .col-xs-12.col-sm-12.col-md-12.col-lg-12
                         .bookLastInfo
                             .bookRow
                                 span(class='properties') автор:
-                                span(id='author')= `${author}`
+                                span(id='author')= `${name}`
                             .bookRow
                                 span(class='properties') год:
                                 span(id='year')= `${year}`
