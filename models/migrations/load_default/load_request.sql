@@ -1,4 +1,4 @@
-INSERT INTO Books (name, pages, year, imgUrl, clicks)
+INSERT INTO Books (book_name, pages, year, imgUrl, clicks)
 VALUES
     ('СИ++ И КОМПЬЮТЕРНАЯ ГРАФИКА', 100, 2020, './images/1.jpg', 0),
     ('Программирование на языке Go!', 66, 2017, './images/2.jpg', 0),
