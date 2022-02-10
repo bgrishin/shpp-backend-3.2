@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Books (
     id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    name varchar(255) NOT NULL,
+    book_name varchar(255) NOT NULL,
     pages int NOT NULL,
     year int NOT NULL,
     imgUrl varchar(255) NOT NULL,
