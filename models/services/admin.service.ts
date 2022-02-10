@@ -48,7 +48,7 @@ async function getAllBooksLength() {
 export async function createBookService(body: ICreateRequest, file: Express.Multer.File | undefined) {
     try {
         const imgUrl: string = `./images/${file?.filename}`
-        const book = await db.promise().query('INSERT INTO Books (name, pages, year, imgUrl, clicks) VALUES (?, ?, ?, ?, ?)', [body.name, body.pages, body.year, imgUrl, 0])
+        const book = await db.promise().query('INSERT INTO Books (book_name, pages, year, imgUrl, clicks) VALUES (?, ?, ?, ?, ?)', [body.name, body.pages, body.year, imgUrl, 0])
         const author = await db.promise().query('INSERT INTO Books_Authors (author_id, book_id) VALUES (?, ?)', [Number(body.author), (book as RowDataPacket)[0].insertId])
         await getAllBooksLength()
         return {
