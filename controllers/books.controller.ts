@@ -1,7 +1,8 @@
 import {Request, Response} from "express";
 import {findBooks, getAll, getOneBook, registerClick} from "../models/services/books.service";
-import {error, Idatapack, IOneDatapack, Iresult} from "../interfaces/books.interface";
+import {error, Iresult} from "../interfaces/books.interface";
 import validator from 'validator'
+import {RowDataPacket} from "mysql2";
 
 export async function showPage(req: Request, res: Response) {
     let offset: number = Number(req.query.offset)
@@ -31,7 +32,7 @@ export async function showOnePage(req: Request, res: Response) {
             error: "400 Bad Request"
         })
     }
-    const result: IOneDatapack | error = await getOneBook(id)
+    const result: RowDataPacket | error = await getOneBook(id)
     if((result as error).error) {
         res.status(404)
         return res.send({
@@ -60,9 +61,9 @@ export async function searchBooks(req: Request, res: Response) {
     let query: string = String(req.query.search!)
     query = decodeURI(query)
     query = validator.escape(query) //Protection from XSS
-    const result: Idatapack[] | boolean = await findBooks(query)
+    const result: RowDataPacket | boolean = await findBooks(query)
     return {
-        books: result,
+        books: (result as RowDataPacket),
         pagination: false,
         query: query
     }
