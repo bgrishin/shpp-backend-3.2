@@ -42,10 +42,10 @@ section#main.main-wrapper
                     .book_item.col-xs-6.col-sm-3.col-md-2.col-lg-2(data-book-id=book.id)
                         .book
                             a(href='http://localhost:3000/book/' + book.id)
-                                img(src=book.imgUrl alt=book.name)
-                                .blockI(data-title=book.name style="height: 46px;")
-                                    .title.size_text(data-book-title=book.name)=book.name
-                                    .author(data-book-author=book.author)=book.author
+                                img(src=book.imgUrl alt=book.book_name)
+                                .blockI(data-title=book.book_name style="height: 46px;")
+                                    .title.size_text(data-book-title=book.book_name)=book.book_name
+                                    .author(data-book-author=book.name)=book.name
             else
                 h1= `По запросу "${query}" ничего не было найдено.`
     nav
