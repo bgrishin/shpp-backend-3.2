@@ -1,8 +1,6 @@
 import {db} from "../config/db.connection";
 import {RowDataPacket} from "mysql2";
 import {
-    Books_Authors,
-    authors,
     IAdminresult,
     ICreateRequest
 } from "../../interfaces/books.interface";
@@ -18,35 +16,19 @@ let allBooksLength: number
 
 
 export async function getAllAdmin(offset: number) {
-    const books = await db.promise().query('SELECT * FROM Books WHERE NOT deleted=TRUE ORDER BY id LIMIT ?, 5', offset)
+    const books = await db.promise().query('SELECT * FROM Books JOIN Books_Authors ON Books_Authors.book_id = Books.id JOIN Authors ON Books_Authors.author_id = Authors.id WHERE NOT books.deleted=TRUE ORDER BY books.id LIMIT ?, 5', offset)
     if((books as RowDataPacket)[0].length === 0) {
         return {
             error: '404'
         }
     }
-    const books_authors = await db.promise().query('SELECT * FROM Books_Authors')
-    const authors = await db.promise().query('SELECT * FROM Authors')
     let result: IAdminresult = {
-        books: [],
-        authors: (authors as RowDataPacket)[0],
+        books: (books as RowDataPacket)[0],
         currentPage: 1,
         allPages: allBooksLength
     }
     if(result.currentPage) {
         result.currentPage = offset / 5 + 1
-    }
-    for(let i = 0; i < (books as RowDataPacket)[0].length; i++) {
-        const author_id = (books_authors as RowDataPacket)[0].find((data: Books_Authors) => data.book_id === (books as RowDataPacket)[0][i].id)?.author_id
-        const author = (authors as RowDataPacket)[0].find((data: authors) => data.id === author_id)?.name
-        result.books[i] = {
-            id: (books as RowDataPacket)[0][i].id,
-            name: (books as RowDataPacket)[0][i].name,
-            pages: (books as RowDataPacket)[0][i].pages,
-            year: (books as RowDataPacket)[0][i].year,
-            clicks: (books as RowDataPacket)[0][i].clicks,
-            author: author,
-            author_id: author_id
-        }
     }
     return (result as IAdminresult)
 }
