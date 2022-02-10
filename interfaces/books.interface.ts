@@ -13,15 +13,6 @@ export interface error {
     error: string
 }
 
-export interface IOneDatapack {
-    id: number,
-    imgUrl: string,
-    name: string,
-    author: string,
-    pages: number,
-    year: number
-}
-
 export interface Idatapack {
     id: number,
     name: string,
@@ -39,11 +30,6 @@ export interface IAdmindatapack {
     author_id: number
 }
 
-export interface IAuthor {
-    id: number,
-    author_name: string
-}
-
 export interface Iresult {
     books: Idatapack[],
     page: number,
@@ -54,7 +40,6 @@ export interface Iresult {
 
 export interface IAdminresult {
     books: IAdmindatapack[],
-    authors: IAuthor[],
     currentPage: number,
     allPages: number
 }
