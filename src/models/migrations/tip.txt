@@ -1,0 +1,12 @@
+Enter "npm run migration:start" and enjoy!
+
+OR
+
+1 step: Enter your data-base data in .env file
+2 step: Enter "npm run migration:up" for create the table
+3 step: Enter "npm run migration:load" for load default data for created table
+
+Enjoy!
+==============================
+
+If you wanna to delete the table enter "npm run migration:down"

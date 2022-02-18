@@ -1,3 +1,0 @@
-DROP TABLE IF EXISTS `Books`;
-DROP TABLE IF EXISTS `Authors`;
-DROP TABLE IF EXISTS `Books_Authors`;

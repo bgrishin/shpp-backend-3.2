@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "npx nodemon app.ts",
-    "migration:up": "ts-node ./models/migrations/up/up.ts",
-    "migration:down": "ts-node ./models/migrations/down/down.ts",
-    "migration:load": "ts-node ./models/migrations/load_default/load.ts",
-    "migration:start": "ts-node ./models/migrations/start.ts"
+    "start:dev": "npx nodemon src/app.ts",
+    "migration:up": "ts-node src/models/migrations/up/up.ts",
+    "migration:down": "ts-node src/models/migrations/down/down.ts",
+    "migration:load": "ts-node src/models/migrations/load_default/load.ts",
+    "migration:start": "ts-node src/models/migrations/start.ts"
   },
   "keywords": [],
   "author": "",
