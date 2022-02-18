@@ -26,9 +26,9 @@ Copy of KOWO BOOKS on TypeScript with MVC
 ### `npm i`
 (Step 3) Create .env file and enter all database data into him
 > HOST_DB=your host
-USERNAME_DB=your username
-PASSWORD_DB=your password
-NAME_DB=your db name
+> USERNAME_DB=your username
+> PASSWORD_DB=your password
+> NAME_DB=your db name
 
 (Step 4) Run migration to prepare database for using
 ### `npm run migration:start`
